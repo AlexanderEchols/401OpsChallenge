@@ -2,7 +2,7 @@
 # Script: Ops 401 Class 06 Ops Challenges: 
 # Author: Alexander Echols.    
 # Date of creation: 24 April 2023                
-# Date of latest revision: 24 April 2023.      
+# Date of latest revision: 25 April 2023.      
 # Purpose: create a script 
 # worked with Geneva, Justin H, and Nick for help in this one.
 
@@ -72,7 +72,7 @@ mode = input("Select what you want to do (1 = Encrypt a message, 2 = Decrypt a m
 
 if mode == '1':
     # prompt user for message to Encrypt
-    message = input('what message would you like to encrypt? ')
+    message = input('What message would you like to encrypt? ')
     message_encryption(message, key)
 elif mode == '2':
     encrypted_message = input("Please paste the message you wish to decrypt. ")
@@ -80,7 +80,7 @@ elif mode == '2':
 elif mode == '3':
     input_file = input("Please provide the file path to the file you wish to Encyrpt ")
     output_file_path = input("Please provide the file path for where you want the Encrypted file to be stored. ")
-    output_file_name = input("what do you want to name the encripted file? ")
+    output_file_name = input("What do you want to name the encripted file? ")
     file_encrypt(input_file, output_file_path,output_file_name, key)
 elif mode == '4':
     input_file = input("Please provide the file path to the file you wish to decyrpt ")
