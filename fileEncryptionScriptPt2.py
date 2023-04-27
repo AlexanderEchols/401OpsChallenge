@@ -88,7 +88,7 @@ def rfile_encrypt(input_path, output_path, key):
             input_dir = (os.path.join(root, dir))
             output_dir = (os.path.join(output_path, os.path.relpath(input_dir, input_path)))
         if not os.path.exists(output_dir):
-                return
+                os.makedirs(output_dir)
                 
 # Function to Decrypt the folder Recursively
 def rfile_decrypt(input_path, output_path, key):
@@ -144,4 +144,4 @@ elif mode == '6':
     rfile_decrypt(input_path, output_path, key)
 elif mode == '8':
     print("Hope I was helpful")
-    exit
+    exit 
