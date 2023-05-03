@@ -1,9 +1,9 @@
 #!/usr/bin/python3
-# Script: Ops 401 Class 11 Ops Challenges: 
+# Script: Ops 401 Class 12 Ops Challenges: 
 # Author: Alexander Echols.    
-# Date of creation: 01 May 2023                
-# Date of latest revision: 01 May 2023.      
-# Purpose: create a python script that scans ports and lets you know if they are open
+# Date of creation: 02 May 2023                
+# Date of latest revision: 02 May 2023.      
+# Purpose: add an ICMP scanner with 
 
 # libraries
 # Needed the sys library to add the location of the scapy download
@@ -33,8 +33,7 @@ if mode == 1:
 # start a for loop to scan all the ports in the port range
 # function
     for dst_port in port_range:
-        src_port = 1025 # if you want to see the stretch goal then comment out this line and...
-        #src_port = random.randint(20, 3389) #... uncommint out the begening of this line
+        src_port = 1025 
         # create and send the TCP SYN packet to check if the ports are open and store that in the variable 'response'
         response = sr1(IP(dst=host)/TCP(sport=src_port, dport=dst_port,flags="S"), timeout=1, verbose=0)
         # check if that response has a TCP layer and if so
@@ -55,7 +54,7 @@ if mode == 1:
         if mode == 2:
         # ICMP Ping Sweep mode
         # Create a list of all addresses in the given network
-            network_addresses = [network_address + i for i in range(256)]
+            network_addresses = [network_address + ip for ip in range(256)]
 
         # Remove the network address and broadcast address from the list
             network_addresses.remove(network_address)
