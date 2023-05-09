@@ -1,15 +1,24 @@
 #!/usr/bin/python3
-
+# Script: Ops 401 Class 16 Ops Challenges: 
+# Author: Alexander Echols.    
+# Date of creation: 08 May 2023                
+# Date of latest revision: 08 May 2023.      
+# Purpose: create a script to look through a list of passwords and compare them to a users input.
 
 # libraries
 import getpass, time, os
 
 
-# file = open(filepath)
+# Mode selection
+print("Choose a mode:")
+print("1. Offensive; Dictionary Iterator ")
+print("2. Defensive; Password Recognition ")
+
+mode = int(input("Enter your choice 1 or 2: "))
 
 
 #function
-'''
+
 def iterator():
     # put the path of where the password list is
     filepath = input("where are your passwords located? \n")
@@ -23,7 +32,7 @@ def iterator():
         time.sleep(1)
         line = file.readline()
     file.close()
-'''
+
 
 def pWordCheck():
     # Accepts a user input string.
@@ -40,4 +49,7 @@ def pWordCheck():
                 return
     print(f"Password '{uPWord}' not in list, good on you. ")
 
-pWordCheck()
+if mode == 1:
+    iterator()
+elif mode == 2:
+    pWordCheck()
