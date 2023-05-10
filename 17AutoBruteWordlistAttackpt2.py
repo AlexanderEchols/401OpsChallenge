@@ -67,9 +67,8 @@ def sshConnect():
     host = input("what ip address are we sshing into? (ex: 192.168.5.1) ")
     # get the username from the user
     username = input("What username is being used? ")
-    passfile = getpass("Tim3T0Le@rn")
     # get the password list from the user
-    # passfile = input("what is the file path to your list of passwords? ")
+    passfile = input("what is the file path to your list of passwords? ")
     # make sure the file path exists
     if os.path.exists(passfile) == False:
         print("file path doesnt exist, you should check it. ")
