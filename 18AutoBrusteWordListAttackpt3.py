@@ -3,7 +3,7 @@
 # Author: Alexander Echols.    
 # Date of creation: 10 May 2023                
 # Date of latest revision: 10 May 2023.      
-# Purpose: 
+# Purpose: we add a unzip function to the brute force attack script
 
 # Libraries
 import paramiko
@@ -120,7 +120,9 @@ def unzip():
                 shutil.move(os.path.abspath(zippedFile), desPath)
                 # tell the user where the file went
                 print(f"File is now at: {desPath}")
+                # end the script if the password works
                 return
+            # if the password was incorrect we try the next one
             except RuntimeError:
                 continue
 
@@ -134,5 +136,3 @@ elif mode == 3:
     sshConnect()
 elif mode == 4:
     unzip()
-
-
