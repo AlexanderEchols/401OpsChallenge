@@ -9,6 +9,7 @@
 import logging
 import sys
 import random
+import ipaddress
 # appending the scapy library to the recognized path
 sys.path.append('/home/als_username/.local/lib/python3.10/site-packages')
 # getting the info from scapy
@@ -42,62 +43,64 @@ network_address = input("Enter the network address (e.g. 10.10.0.0/24): ")
 
 # Define Functions
 # function for port scanner
-def Port_Scanner():
+# Define Functions
+# function for port scanner
+def PortRangeScanner():
+    host = 'scanme.nmap.org'
+    port_range = [22, 23, 80, 443, 3389]
     for dst_port in port_range:
-        src_port = 1025 
-        # create and send the TCP SYN packet to check if the ports are open and store that in the variable 'response'
-        response = sr1(IP(dst=host)/TCP(sport=src_port, dport=dst_port,flags="S"), timeout=1, verbose=0)
-        # check if that response has a TCP layer and if so
-        if(response.haslayer(TCP)):
-            # We check if the port is open if so we...
-            if(response.getlayer(TCP).flags == 0x12):
-                # ...print to the screen so the user knows
-                logging.info("PORT VACENT")
-            # if the response is not open we...
-            elif(response.getlayer(TCP).flags & 0x14 == 0x14):
-                # ...print and let the user know the port is closed
-                logging.info("PORT IS UNAVALABLE")
-        # if there is no TCP layer indicating that the port is open or closed
+        src_port = 1025
+        response = sr1(IP(dst=host) / TCP(sport=src_port, dport=dst_port, flags="S"), timeout=1, verbose=0)
+        
+        if response and response.haslayer(TCP):
+            if response.getlayer(TCP).flags == 0x12:
+                print("Port {} is open.".format(dst_port))
+            elif response.getlayer(TCP).flags & 0x14 == 0x14:
+                print("Port {} is closed.".format(dst_port))
         else:
-            # we let the user know it is filtered and we have no idea
-            print("Port is filtered mate, means we siliently drop it ")
+            print("Port {} is filtered, status unknown.".format(dst_port))
 
 # Function for the ICMP Scan
-def ICMP_Scanner():
-    # Create a list of all addresses in the given network
-    network_addresses = [network_address + ip for ip in range(256)]
+def icmp_scanner():
+    try:
+        # Prompt user for network address and subnet mask
+        network_address = input("Enter the network address (e.g. 192.168.0.0/24): ")
+        subnet_mask = int(input("Enter the subnet mask (e.g. 24): "))
 
-# Remove the network address and broadcast address from the list
-    network_addresses.remove(network_address)
-    network_addresses.remove(network_address + 255)
+        # Create an IP network object from the input network address
+        network = ipaddress.IPv4Network(network_address)
 
-# Ping all addresses on the given network
-    for network_address in network_addresses:
-    # Send an ICMP echo request to the address
-        response = sr1(IP(dst=network_address)/ICMP(), timeout=1, verbose=0)
+        # Create a list of all addresses in the given network
+        network_addresses = [str(ip) for ip in network.hosts()]
 
-    # Check if the response is received
-        if response is None:
-            print("Host {} is down or unresponsive.".format(network_address))
-        elif response.getlayer(ICMP).type == 3 and response.getlayer(ICMP).code in [1, 2, 3, 9, 10, 13]:
-            print("Host {} is actively blocking ICMP traffic.".format(network_address))
-        else:
-            print("Host {} is responding.".format(network_address))
+        # Ping all addresses on the given network
+        online_hosts = 0
 
-# Count how many hosts are online
-    online_hosts = len([network_address for network_address in network_addresses if response is not None])
+        for address in network_addresses:
+            response = sr1(IP(dst=address) / ICMP(), timeout=1, verbose=0)
 
-    print("There are {} hosts online.".format(online_hosts))
+            if response is None:
+                print(f"Host {address} is down or unresponsive.")
+            elif response.getlayer(ICMP).type == 3 and response.getlayer(ICMP).code in [1, 2, 3, 9, 10, 13]:
+                print(f"Host {address} is actively blocking ICMP traffic.")
+            else:
+                print(f"Host {address} is responding.")
+                online_hosts += 1
 
+        print(f"There are {online_hosts} hosts online.")
+
+    except ValueError as e:
+        print("Error: Invalid network address or subnet mask.")
+    except Exception as e:
+        print("Error occurred while performing ICMP scanning:", str(e))
 # Main
 if __name__ == '__main__':
-    alsLogger()
     icmp_response = sr1(IP(dst=host)/ICMP(), timeout=1, verbose=0)
 
     if icmp_response is not None:
         print("Host {} is online and responding to ICMP echo requests.".format(host))
         #call Port_Scanner
-        Port_Scanner()
+        PortRangeScanner()
     else:
         print("Host {} is down or unresponsive to ICMP echo requests.".format(host))
 # End
