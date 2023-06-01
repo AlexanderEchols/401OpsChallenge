@@ -40,7 +40,7 @@ def search():
 # Main
 mode = input("Do you wish to encript the files you are searching? Y/N: ")
 
-if mode == "Y":
+if mode == "Y" or "y":
     filepath = search()
     if filepath:
         hashfunc(filepath)
